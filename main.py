@@ -13,7 +13,10 @@ for item in ls:
     floorStr += item
 
 print(floorStr)
-
+star = ""
+for i in range(78):
+    star += "*"
+print(star)
 floor.generateHalls()
 ls = floor.combineHalls()
 floorStr = ""
