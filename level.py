@@ -40,32 +40,31 @@ class Floor:
         self.hallsHorizontal = []
         for i in range(3):
             for j in range(2):
+                print(f"Hall for {(i*3) + j} and {(i*3) + j + 1}")
                 self.hallsHorizontal.append(Hall(self.rooms[(i*3)+j], self.rooms[(i*3)+j+1], self.cellWidth, self.cellHeight))
-                for k in range(10):
-                    print(self.hallsHorizontal[j].getLine(k))
+                #for k in range(10):
+                    #print(self.hallsHorizontal[j].getLine(k))
+        print(f"Length of halls list {len(self.hallsHorizontal)}")
     
     def combineHalls(self):
         self.newFloor = []
-        for item in range(len(self.hallsHorizontal)):
-            start = self.hallsHorizontal[item].startX + (26 * (item%2))
-            end = 26 + self.hallsHorizontal[item].endX + (26 * (item%2))
-            print(f"Start: {start} End: {end}")
-            for i in range(10):
-                line = i
+        for row in range(int(len(self.hallsHorizontal)/2)):
+            print(f"Row: {row}")
+            for line in range(self.cellHeight):
+                print(f"Line: {line}")
                 section = []
-                index = line*((self.cellWidth*3)+1)
-                for k in range((self.cellWidth*3)+1):
+                index = (((row*self.cellHeight)+line)*((self.cellWidth*3)+1))
+                print(f"Index: {index}")
+                for i in range((self.cellWidth*3)+1):
                     section.append(self.floor[index])
                     index += 1
-                
-                hallList = self.hallsHorizontal[item].getLine(line)
-                print(hallList)
-                #print(len(hallList))
-                #print(len(section))
-                for j in range(start,end):
-                    #print(f"Line: {line} Spot: {j} Value: {hallList[j-start]}, Start: {start}, End: {end}")
-                    if(not(hallList[j-start] == " ")):
-                        section[j] = hallList[j-start]
+                for item in range(2):
+                    start = (26*(item%2)) + self.hallsHorizontal[row*2 + (item % 2)].startX
+                    end = (26*(item%2)) + 26 + self.hallsHorizontal[(row*2) + (item % 2)].endX
+                    hall = self.hallsHorizontal[row*2 + (item % 2)].getLine(line)
+                    for i in range(start, end):
+                        if(not(hall[i-start] == " ")):
+                            section[i] = hall[i-start]
                 self.newFloor += section
         return self.newFloor
 
