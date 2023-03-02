@@ -15,3 +15,9 @@ for item in ls:
 print(floorStr)
 
 floor.generateHalls()
+ls = floor.combineHalls()
+floorStr = ""
+for item in ls:
+    floorStr += item
+
+print(floorStr)

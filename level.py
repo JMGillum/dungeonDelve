@@ -37,7 +37,38 @@ class Floor:
                 print(item.getLine(i))
     
     def generateHalls(self):
-        hall = Hall(self.rooms[0], self.rooms[1], self.cellWidth, self.cellHeight)
+        self.hallsHorizontal = []
+        for i in range(3):
+            for j in range(2):
+                self.hallsHorizontal.append(Hall(self.rooms[(i*3)+j], self.rooms[(i*3)+j+1], self.cellWidth, self.cellHeight))
+                for k in range(10):
+                    print(self.hallsHorizontal[j].getLine(k))
+    
+    def combineHalls(self):
+        self.newFloor = []
+        for item in range(len(self.hallsHorizontal)):
+            start = self.hallsHorizontal[item].startX + (26 * (item%2))
+            end = 26 + self.hallsHorizontal[item].endX + (26 * (item%2))
+            print(f"Start: {start} End: {end}")
+            for i in range(10):
+                line = i
+                section = []
+                index = line*((self.cellWidth*3)+1)
+                for k in range((self.cellWidth*3)+1):
+                    section.append(self.floor[index])
+                    index += 1
+                
+                hallList = self.hallsHorizontal[item].getLine(line)
+                print(hallList)
+                #print(len(hallList))
+                #print(len(section))
+                for j in range(start,end):
+                    #print(f"Line: {line} Spot: {j} Value: {hallList[j-start]}, Start: {start}, End: {end}")
+                    if(not(hallList[j-start] == " ")):
+                        section[j] = hallList[j-start]
+                self.newFloor += section
+        return self.newFloor
+
 
 
 class Room:
@@ -105,7 +136,7 @@ class Hall:
         self.room2 = room2
         self.cellWidth = width
         self.cellHeight = height
-        self.startX = room1.padLeft + room1.width
+        self.startX = room1.padLeft + room1.width - 1
         self.startY = random.randrange(2,room1.height) + room1.padTop
         self.endX = room2.padLeft + 1
         self.endY = random.randrange(2,room2.height) + room2.padTop
@@ -116,4 +147,51 @@ class Hall:
         self.generate()
 
     def generate(self):
-        pass
+        self.floor = []
+        startIsLower = self.startY >= self.endY
+        print(startIsLower)
+        for line in range(1, self.cellHeight + 1):
+            if(line < self.startY and line < self.endY):
+                for character in range(self.deltaX):
+                    self.floor.append(" ")
+            else:
+                if(line == self.startY or line == self.endY):
+                    for character in range(self.deltaX):
+                        if (line == self.startY and line == self.endY):
+                            self.floor.append("#")
+                        elif(line == self.startY):
+                            if character <= math.floor(self.deltaX/2):
+                                self.floor.append("#")
+                            else:
+                                self.floor.append(" ")
+                        elif (line == self.endY):
+                            if character >= math.floor(self.deltaX/2):
+                                self.floor.append("#")
+                            else:
+                                self.floor.append(" ")
+                else:
+                    if(not(self.startY == self.endY)):
+                        for character in range(self.deltaX):
+                            if(character == math.floor(self.deltaX/2) and ((self.startY <= line <= self.endY) or (self.endY <= line <= self.startY))):
+                                self.floor.append("#")
+                            else:
+                                self.floor.append(" ")
+                    else:
+                        for character in range(self.deltaX):
+                            self.floor.append(" ")
+            self.floor.append(os.linesep)
+    
+    def getHall(self):
+        return self.floor
+    
+    def getLine(self,line):
+        section = []
+        index = line*(self.deltaX+1)
+        try:
+            for i in range(self.deltaX+1):
+                section.append(self.floor[index])
+                index += 1
+            return section
+        except IndexError:
+            print("ERROR GETTING LINE FROM HALL")
+            return None
