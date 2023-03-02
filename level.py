@@ -40,21 +40,21 @@ class Floor:
         self.hallsHorizontal = []
         for i in range(3):
             for j in range(2):
-                print(f"Hall for {(i*3) + j} and {(i*3) + j + 1}")
+                #print(f"Hall for {(i*3) + j} and {(i*3) + j + 1}")
                 self.hallsHorizontal.append(Hall(self.rooms[(i*3)+j], self.rooms[(i*3)+j+1], self.cellWidth, self.cellHeight))
                 #for k in range(10):
                     #print(self.hallsHorizontal[j].getLine(k))
-        print(f"Length of halls list {len(self.hallsHorizontal)}")
+        #print(f"Length of halls list {len(self.hallsHorizontal)}")
     
     def combineHalls(self):
         self.newFloor = []
         for row in range(int(len(self.hallsHorizontal)/2)):
-            print(f"Row: {row}")
+            #print(f"Row: {row}")
             for line in range(self.cellHeight):
-                print(f"Line: {line}")
+                #print(f"Line: {line}")
                 section = []
                 index = (((row*self.cellHeight)+line)*((self.cellWidth*3)+1))
-                print(f"Index: {index}")
+                #print(f"Index: {index}")
                 for i in range((self.cellWidth*3)+1):
                     section.append(self.floor[index])
                     index += 1
@@ -142,13 +142,11 @@ class Hall:
         self.deltaX = (self.cellWidth - self.startX) + self.endX
         self.deltaY = self.startY - self.endY
 
-        print(f"StartX: {self.startX} StartY: {self.startY} EndX: {self.endX} EndY: {self.endY} DeltaX: {self.deltaX} DeltaY: {self.deltaY}")
+        #print(f"StartX: {self.startX} StartY: {self.startY} EndX: {self.endX} EndY: {self.endY} DeltaX: {self.deltaX} DeltaY: {self.deltaY}")
         self.generate()
 
     def generate(self):
         self.floor = []
-        startIsLower = self.startY >= self.endY
-        print(startIsLower)
         for line in range(1, self.cellHeight + 1):
             if(line < self.startY and line < self.endY):
                 for character in range(self.deltaX):
