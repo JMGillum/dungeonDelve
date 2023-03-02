@@ -57,69 +57,46 @@ class Screen:
                 
 class Floor:
     def __init__(self):
-        #self.roomCount = random.randrange(5,10)
-        self.roomCount = 9
-        print(self.roomCount)
+        self.cellWidth = 78/3
+        self.cellHeight = 30/3
         self.generateRooms()
     def generateRooms(self):
         self.rooms = []
-        for i in range(self.roomCount):
+        for i in range(9):
             self.rooms.append(Room())
             print(self.rooms[-1].getRoom())
         print(self.rooms)
 
 class Room:
     def __init__(self):
-        self.width = random.randrange(5,26)
-        self.height = random.randrange(3,8)
+        pass
+    def generate(self,width,height):
+        self.width = random.randrange(8,width-1)
+        self.height = random.randrange(5,height-1)
+        self.padLeft = random.randrange(1,width-self.width)
+        self.padTop = random.randrange(1,height-self.height)
         self.floor = []
-        for i in range(self.width*self.height):
-            self.floor.append(" ")
-    def fillRoom(self, type = 0):
-        """
-        Types can be:
-            1 ~ room does not exist
-            2 ~ empty room
-            3 ~ store room
-            4 ~ monster room
-            5 ~ maze
-        """
-        if not type == 0:
-            weight = [4,19,44,94,99]
-            roll = random.randrange(100)
-            if roll <= weight[1]:
-                self.type = 1
-            elif roll <= weight[2]:
-                self.type = 2
-            elif roll <= weight[3]:
-                self.type = 3
-            elif roll <= weight[4]:
-                self.type = 4
-            elif roll <= weight[5]:
-                self.type = 5
+        for line in range(1, height+1):
+            if(line <= self.padTop or line > (self.padTop+self.height)):
+                for character in range(1, width + 1):
+                    self.floor.append("p")
+            elif (line == self.padTop + 1 or line == self.padTop + self.height):
+                for character in range(1, width + 1):
+                    if (character <= self.padLeft or character > self.padLeft + self.width):
+                        self.floor.append("p")
+                    else:
+                        self.floor.append("@")
             else:
-                self.type = 4
-        else:
-            self.type = type
-        
-    def getRoom(self, border = False):
-        if(border):
-            room = []
-            index = 0
-            for i in range(self.height + 2):
-                if i == 0 or i == self.height +1:
-                    for j in range(self.width + 2):
-                        room.append("@")
-                else:
-                    room.append("@")
-                    for j in range(self.width):
-                        room.append(self.floor[index])
-                        index += 1
-                    room.append("@")
-                room.append("\n")
-            return room
-        else:
-            return self.floor
+                for character in range(1, width+1):
+                    if (character <= self.padLeft or character > self.padLeft + self.width):
+                        self.floor.append("p")
+                    elif (character == self.padLeft + 1 or character == self.padLeft + self.width):
+                        self.floor.append("@")
+                    else:
+                        self.floor.append(" ")
+            self.floor.append("\n")
+    def getRoom(self):
+        return self.floor
     def getLine(self, line, border = False):
         section = []
         index = line*self.width
@@ -145,8 +122,6 @@ class Room:
             except IndexError:
                 return None
         return section
-    def spawn(self, type = " "):
-        self.floor[random.randrange(len(self.floor))] = type
 
 
 class Hall:
