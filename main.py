@@ -24,3 +24,8 @@ for item in ls:
     floorStr += item
 
 print(floorStr)
+
+hallV = level.HallVertical(floor.rooms[0],floor.rooms[3],floor.cellWidth,floor.cellHeight)
+print(hallV.getHall())
+for i in range(floor.cellHeight * 2):
+    print(hallV.getLine(i))
