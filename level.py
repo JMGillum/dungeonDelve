@@ -192,3 +192,75 @@ class Hall:
         except IndexError:
             print("ERROR GETTING LINE FROM HALL")
             return None
+
+
+class HallVertical:
+    def __init__(self, room1, room2, width, height):
+        self.room1 = room1
+        self.room2 = room2
+        self.cellWidth = width
+        self.cellHeight = height
+        self.startX = random.randrange(2,room1.width) + room1.padLeft
+        self.startY = room1.padTop + room1.height
+        self.endX = random.randrange(2,room2.width) + room2.padLeft
+        self.endY = room2.padTop + 1 + self.cellHeight
+        self.deltaX = abs(self.startX-self.endX)
+        self.deltaY = self.endY - self.startY
+        self.middle = math.floor(self.deltaY/2)
+
+        print(f"StartX: {self.startX} StartY: {self.startY} EndX: {self.endX} EndY: {self.endY} DeltaX: {self.deltaX} DeltaY: {self.deltaY} Midpoint: {math.floor(abs(self.deltaY/2))}")
+        self.generate()
+
+    def generate(self):
+        self.floor = []
+        for line in range(1, self.endY + 1):
+            #print(f"Line {line} line-start {line - self.startY}")
+            if(((line < self.startY) and (line < self.endY)) or ((line > self.startY) and (line > self.endY))):
+                print(f"line {line} is before or after the halls")
+                self.floor.append(os.linesep)
+            elif(not((line-self.startY) == self.middle)):
+                print(f"line {line} is not the midpoint")
+                for character in range(1,self.cellWidth+1):
+                    if(line-self.startY < self.middle):
+                        #print(f"line {line} is less the midpoint")
+                        if(character == self.startX):
+                            self.floor.append("#")
+                        else:
+                            self.floor.append(" ")
+                    elif(line-self.startY > self.middle):
+                        if(character == self.endX):
+                            self.floor.append("#")
+                        else:
+                            self.floor.append(" ")
+                self.floor.append(os.linesep)
+            elif((line - self.startY) == self.middle):
+                print(f"line {line} is the midpoint")
+                for character in range(1,self.cellWidth+1):
+                    if((self.startX <= character <= self.endX) or (self.endX <= character <= self.startX)):
+                        self.floor.append("#")
+                    else:
+                        self.floor.append(" ")
+                self.floor.append(os.linesep)
+
+    
+    def getHall(self):
+        return self.floor
+    
+    def getLine(self,line):
+        section = []
+        index = 0
+        try:
+            for item in self.floor:
+                if (index == line):
+                    if(not(item == os.linesep)):
+                        section.append(item)
+                    else:
+                        section.append(item)
+                        break
+                else:
+                    if(item == os.linesep):
+                        index += 1
+            return section
+        except IndexError:
+            print(f"Index Error in getLine of {self}")
+            return None
