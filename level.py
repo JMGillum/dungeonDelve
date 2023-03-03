@@ -68,7 +68,10 @@ class Floor:
                 self.newFloor += section
         self.floor = self.newFloor
 
-        self.newFloor = []
+        self.top = []
+        self.middle1 = []
+        self.middle2 = []
+        self.bottom = []
         for row in range(int(len(self.hallsVertical)/3)):
             for line in range(self.cellHeight * 2):
                 section = []
@@ -77,9 +80,12 @@ class Floor:
                     section.append(self.floor[index])
                     index += 1
 
+                bigHall = []
                 for i in range(3):
                     hall = self.hallsVertical[(row*3)+i].getLine(line)
-                    if(not(hall == None)):
+                    #print(f"Hall: {hall}")
+                    if((hall is not None) and (len(hall)>0)):
+                        #print("Hall is not none")
                         del(hall[-1])
                         if (len(hall) < self.cellWidth):
                             for character in range(self.cellWidth - len(hall)):
@@ -88,10 +94,29 @@ class Floor:
                         hall = []
                         for character in range(self.cellWidth):
                             hall.append(" ")
-                    section += hall
-                section.append(os.linesep)
-        self.floor = self.newFloor
+                    bigHall += hall
+                #print(f"Section: {section}")
+                bigHall.append(os.linesep)
+                for item in range(len(section)):
+                    if(bigHall[item] != " "):
+                        section[item] = bigHall[item]
 
+                if (row == 0):
+                    if (line >= self.cellHeight):
+                        self.middle1 += section
+                    else:
+                        self.top += section
+                if (row == 1):
+                    if (line < self.cellHeight):
+                        self.middle2 += section
+                    else:
+                        self.bottom += section
+        #print(f"m1: {len(self.middle1)}, m2: {len(self.middle2)}")
+        for i in range(len(self.middle1)):
+            if(self.middle2[i] != " "):
+                if(self.middle1[i] != "#"):
+                    self.middle1[i] = self.middle2[i]
+        self.floor = self.top + self.middle1 + self.bottom
         return self.floor
 
 
@@ -234,7 +259,7 @@ class HallVertical:
         self.deltaY = self.endY - self.startY
         self.middle = math.floor(self.deltaY/2)
 
-        print(f"StartX: {self.startX} StartY: {self.startY} EndX: {self.endX} EndY: {self.endY} DeltaX: {self.deltaX} DeltaY: {self.deltaY} Midpoint: {math.floor(abs(self.deltaY/2))}")
+        #print(f"StartX: {self.startX} StartY: {self.startY} EndX: {self.endX} EndY: {self.endY} DeltaX: {self.deltaX} DeltaY: {self.deltaY} Midpoint: {math.floor(abs(self.deltaY/2))}")
         self.generate()
 
     def generate(self):
@@ -242,10 +267,10 @@ class HallVertical:
         for line in range(1, self.endY + 1):
             #print(f"Line {line} line-start {line - self.startY}")
             if(((line < self.startY) and (line < self.endY)) or ((line > self.startY) and (line > self.endY))):
-                print(f"line {line} is before or after the halls")
+                #print(f"line {line} is before or after the halls")
                 self.floor.append(os.linesep)
             elif(not((line-self.startY) == self.middle)):
-                print(f"line {line} is not the midpoint")
+                #print(f"line {line} is not the midpoint")
                 for character in range(1,self.cellWidth+1):
                     if(line-self.startY < self.middle):
                         #print(f"line {line} is less the midpoint")
@@ -260,7 +285,7 @@ class HallVertical:
                             self.floor.append(" ")
                 self.floor.append(os.linesep)
             elif((line - self.startY) == self.middle):
-                print(f"line {line} is the midpoint")
+                #print(f"line {line} is the midpoint")
                 for character in range(1,self.cellWidth+1):
                     if((self.startX <= character <= self.endX) or (self.endX <= character <= self.startX)):
                         self.floor.append("#")
