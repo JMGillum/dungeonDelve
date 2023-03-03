@@ -1,31 +1,24 @@
 import level
 
 
+def convertListToString(ls):
+    string = ""
+    for item in ls:
+        string += item
+    return string
+
+
 
 screen = level.Screen()
 print(f"Width: {screen.width} Height: {screen.height}")
 
 floor = level.Floor()
+print(convertListToString(floor.combineRooms()))
 
-ls = floor.combineRooms()
-floorStr = ""
-for item in ls:
-    floorStr += item
-
-print(floorStr)
 star = ""
-for i in range(78):
+for i in range(screen.width):
     star += "*"
 print(star)
+
 floor.generateHalls()
-ls = floor.combineHalls()
-floorStr = ""
-for item in ls:
-    floorStr += item
-
-print(floorStr)
-
-hallV = level.HallVertical(floor.rooms[0],floor.rooms[3],floor.cellWidth,floor.cellHeight)
-print(hallV.getHall())
-for i in range(floor.cellHeight * 2):
-    print(hallV.getLine(i))
+print(convertListToString(floor.combineHalls()))
