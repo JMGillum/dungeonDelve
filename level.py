@@ -38,13 +38,13 @@ class Floor:
     
     def generateHalls(self):
         self.hallsHorizontal = []
+        self.hallsVertical = []
         for i in range(3):
             for j in range(2):
-                #print(f"Hall for {(i*3) + j} and {(i*3) + j + 1}")
                 self.hallsHorizontal.append(Hall(self.rooms[(i*3)+j], self.rooms[(i*3)+j+1], self.cellWidth, self.cellHeight))
-                #for k in range(10):
-                    #print(self.hallsHorizontal[j].getLine(k))
-        #print(f"Length of halls list {len(self.hallsHorizontal)}")
+        for i in range(2):
+            for j in range(3):
+                self.hallsVertical.append(HallVertical(self.rooms[(i*3)+j], self.rooms[((i+1)*3)+j], self.cellWidth, self.cellHeight))
     
     def combineHalls(self):
         self.newFloor = []
@@ -66,7 +66,33 @@ class Floor:
                         if(not(hall[i-start] == " ")):
                             section[i] = hall[i-start]
                 self.newFloor += section
-        return self.newFloor
+        self.floor = self.newFloor
+
+        self.newFloor = []
+        for row in range(int(len(self.hallsVertical)/3)):
+            for line in range(self.cellHeight * 2):
+                section = []
+                index = ((row*self.cellHeight) + line) * ((self.cellWidth*3)+1)
+                for i in range((self.cellWidth*3)+1):
+                    section.append(self.floor[index])
+                    index += 1
+
+                for i in range(3):
+                    hall = self.hallsVertical[(row*3)+i].getLine(line)
+                    if(not(hall == None)):
+                        del(hall[-1])
+                        if (len(hall) < self.cellWidth):
+                            for character in range(self.cellWidth - len(hall)):
+                                hall.append(" ")
+                    else:
+                        hall = []
+                        for character in range(self.cellWidth):
+                            hall.append(" ")
+                    section += hall
+                section.append(os.linesep)
+        self.floor = self.newFloor
+
+        return self.floor
 
 
 
