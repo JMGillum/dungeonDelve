@@ -1,0 +1,12 @@
+{
+    "directories":[
+        {
+            "path": "example",
+            "characters": "characters.json"
+        },
+        {
+            "path": "test",
+            "characters": "level.json"
+        }
+    ]
+}

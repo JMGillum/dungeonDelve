@@ -1,0 +1,11 @@
+{
+    "topWall": "@",
+    "leftWall": "@",
+    "bottomWall": "@",
+    "rightWall": "@",
+    "cornerWall":"@",
+    "floor": " ",
+    "hallStart": "#",
+    "empty": " ",
+    "hallMiddle": "#"
+}
