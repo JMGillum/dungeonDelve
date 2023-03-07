@@ -11,6 +11,9 @@ class Customization:
         self.cornerWall = "@"
         self.floor = " "
         self.hallStart = "#"
+        self.empty = " "
+
+        self.getOrder()
 
 
     def getOrder(self):
@@ -64,15 +67,9 @@ class Customization:
             self.hallStart = characters["hallStart"]
         except KeyError:
             pass
+        try:
+            self.empty = characters["empty"]
+        except KeyError:
+            pass
     
         
-                
-    
-        
-
-
-custom = Customization()
-custom.getOrder()
-print(custom.data)
-print(custom.hallStart)
-print(custom.topWall)
