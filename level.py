@@ -1,4 +1,7 @@
+import getData
 import random, os, math
+
+custom = getData.Customization()
     
 class Screen:
     width = os.get_terminal_size().columns
@@ -16,7 +19,6 @@ class Floor:
         for i in range(9):
             self.rooms.append(Room(self.cellWidth,self.cellHeight))
             self.rooms[-1].generate()
-        #print(self.rooms)
 
     def combineRooms(self):
         self.floor = []
@@ -49,12 +51,9 @@ class Floor:
     def combineHalls(self):
         self.newFloor = []
         for row in range(int(len(self.hallsHorizontal)/2)):
-            #print(f"Row: {row}")
             for line in range(self.cellHeight):
-                #print(f"Line: {line}")
                 section = []
                 index = (((row*self.cellHeight)+line)*((self.cellWidth*3)+1))
-                #print(f"Index: {index}")
                 for i in range((self.cellWidth*3)+1):
                     section.append(self.floor[index])
                     index += 1
@@ -83,22 +82,19 @@ class Floor:
                 bigHall = []
                 for i in range(3):
                     hall = self.hallsVertical[(row*3)+i].getLine(line)
-                    #print(f"Hall: {hall}")
                     if((hall is not None) and (len(hall)>0)):
-                        #print("Hall is not none")
                         del(hall[-1])
                         if (len(hall) < self.cellWidth):
                             for character in range(self.cellWidth - len(hall)):
-                                hall.append(" ")
+                                hall.append(custom.empty)
                     else:
                         hall = []
                         for character in range(self.cellWidth):
-                            hall.append(" ")
+                            hall.append(custom.empty)
                     bigHall += hall
-                #print(f"Section: {section}")
                 bigHall.append(os.linesep)
                 for item in range(len(section)):
-                    if(bigHall[item] != " "):
+                    if(bigHall[item] != custom.empty):
                         section[item] = bigHall[item]
 
                 if (row == 0):
@@ -111,10 +107,10 @@ class Floor:
                         self.middle2 += section
                     else:
                         self.bottom += section
-        #print(f"m1: {len(self.middle1)}, m2: {len(self.middle2)}")
+
         for i in range(len(self.middle1)):
-            if(self.middle2[i] != " "):
-                if(self.middle1[i] != "#"):
+            if(self.middle2[i] != custom.empty):
+                if(self.middle1[i] != custom.hallStart and self.middle1[i] != custom.hallMiddle):
                     self.middle1[i] = self.middle2[i]
         self.floor = self.top + self.middle1 + self.bottom
         return self.floor
@@ -141,27 +137,38 @@ class Room:
                         if(line == 1 or line == self.cellHeight):
                             self.floor.append("-")
                         else:
-                            self.floor.append(" ")
-            elif (line == self.padTop + 1 or line == self.padTop + self.height):
+                            self.floor.append(custom.empty)
+            elif (line == self.padTop + 1):
                 for character in range(1, self.cellWidth + 1):
                     if (character <= self.padLeft or character > self.padLeft + self.width):
                         if(character == self.cellWidth or character == 1):
                             self.floor.append("|")
                         else:
-                            self.floor.append(" ")
+                            self.floor.append(custom.empty)
                     else:
-                        self.floor.append("@")
+                        self.floor.append(custom.topWall)
+            elif (line == self.padTop + self.height):
+                for character in range(1, self.cellWidth + 1):
+                    if (character <= self.padLeft or character > self.padLeft + self.width):
+                        if(character == self.cellWidth or character == 1):
+                            self.floor.append("|")
+                        else:
+                            self.floor.append(custom.empty)
+                    else:
+                        self.floor.append(custom.bottomWall)
             else:
                 for character in range(1, self.cellWidth+1):
                     if (character <= self.padLeft or character > self.padLeft + self.width):
                         if(character == self.cellWidth or character == 1):
                             self.floor.append("|")
                         else:
-                            self.floor.append(" ")
-                    elif (character == self.padLeft + 1 or character == self.padLeft + self.width):
-                        self.floor.append("@")
+                            self.floor.append(custom.empty)
+                    elif (character == self.padLeft + 1):
+                        self.floor.append(custom.leftWall)
+                    elif (character == self.padLeft + self.width):
+                        self.floor.append(custom.rightWall)
                     else:
-                        self.floor.append(" ")
+                        self.floor.append(custom.floor)
             self.floor.append(os.linesep)
 
     def getRoom(self):
@@ -201,32 +208,41 @@ class Hall:
         for line in range(1, self.cellHeight + 1):
             if(line < self.startY and line < self.endY):
                 for character in range(self.deltaX):
-                    self.floor.append(" ")
+                    self.floor.append(custom.empty)
             else:
                 if(line == self.startY or line == self.endY):
                     for character in range(self.deltaX):
                         if (line == self.startY and line == self.endY):
-                            self.floor.append("#")
+                            if (character == 0 or character == self.deltaX-1):
+                                self.floor.append(custom.hallStart)
+                            else:
+                                self.floor.append(custom.hallMiddle)
                         elif(line == self.startY):
                             if character <= math.floor(self.deltaX/2):
-                                self.floor.append("#")
+                                if (character == 0):
+                                    self.floor.append(custom.hallStart)
+                                else:
+                                    self.floor.append(custom.hallMiddle)
                             else:
-                                self.floor.append(" ")
+                                self.floor.append(custom.empty)
                         elif (line == self.endY):
                             if character >= math.floor(self.deltaX/2):
-                                self.floor.append("#")
+                                if (character == self.deltaX-1):
+                                    self.floor.append(custom.hallStart)
+                                else:
+                                    self.floor.append(custom.hallMiddle)
                             else:
-                                self.floor.append(" ")
+                                self.floor.append(custom.empty)
                 else:
                     if(not(self.startY == self.endY)):
                         for character in range(self.deltaX):
                             if(character == math.floor(self.deltaX/2) and ((self.startY <= line <= self.endY) or (self.endY <= line <= self.startY))):
-                                self.floor.append("#")
+                                self.floor.append(custom.hallMiddle)
                             else:
-                                self.floor.append(" ")
+                                self.floor.append(custom.empty)
                     else:
                         for character in range(self.deltaX):
-                            self.floor.append(" ")
+                            self.floor.append(custom.empty)
             self.floor.append(os.linesep)
     
     def getHall(self):
@@ -265,32 +281,33 @@ class HallVertical:
     def generate(self):
         self.floor = []
         for line in range(1, self.endY + 1):
-            #print(f"Line {line} line-start {line - self.startY}")
             if(((line < self.startY) and (line < self.endY)) or ((line > self.startY) and (line > self.endY))):
-                #print(f"line {line} is before or after the halls")
                 self.floor.append(os.linesep)
             elif(not((line-self.startY) == self.middle)):
-                #print(f"line {line} is not the midpoint")
                 for character in range(1,self.cellWidth+1):
                     if(line-self.startY < self.middle):
-                        #print(f"line {line} is less the midpoint")
                         if(character == self.startX):
-                            self.floor.append("#")
+                            if(line == self.startY):
+                                self.floor.append(custom.hallStart)
+                            else:
+                                self.floor.append(custom.hallMiddle)
                         else:
-                            self.floor.append(" ")
+                            self.floor.append(custom.empty)
                     elif(line-self.startY > self.middle):
                         if(character == self.endX):
-                            self.floor.append("#")
+                            if(line == self.endY):
+                                self.floor.append(custom.hallStart)
+                            else:
+                                self.floor.append(custom.hallMiddle)
                         else:
-                            self.floor.append(" ")
+                            self.floor.append(custom.empty)
                 self.floor.append(os.linesep)
             elif((line - self.startY) == self.middle):
-                #print(f"line {line} is the midpoint")
                 for character in range(1,self.cellWidth+1):
                     if((self.startX <= character <= self.endX) or (self.endX <= character <= self.startX)):
-                        self.floor.append("#")
+                        self.floor.append(custom.hallMiddle)
                     else:
-                        self.floor.append(" ")
+                        self.floor.append(custom.empty)
                 self.floor.append(os.linesep)
 
     
