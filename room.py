@@ -58,7 +58,16 @@ class Room:
         
 
     def generateHall(self):
-        pass
+        self.generate()
+        self.generate()
+        x = random.randint(1,self.width-2)
+        y = random.randint(1,self.height-2)
+
+        line = self.map[y]
+        line = list(line)
+        line[x] = "H"
+        "".join(line)
+        self.map[y] = line
 
     def print(self):
         for line in self.map:
