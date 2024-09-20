@@ -8,25 +8,27 @@ custom = getData.Customization()
 
 class Floor:
     def __init__(self):
-        self.cellWidth = math.floor(78/3)
-        self.cellHeight = math.floor(30/3)
+        self.cellWidth = math.floor(78/3) # 26
+        self.cellHeight = math.floor(24/3) # 8
         self.types = {"hall":0,
              "normal":1,
              "treasure":2,
              "stairs":3
              }
+        self.layout = []
+        self.size = 3 # 3 x 3 rooms
 
     def setSize(self,width,height):
         self.width = width
-        self.cellWidth = math.floor(width/3)
+        self.cellWidth = math.floor(width/self.size)
         self.height = height
-        self.cellHeight = math.floor(height/3)
+        self.cellHeight = math.floor(height/self.size)
 
     def generateRooms(self):
         
         random.seed(datetime.now().timestamp())
 
-        numRooms = 9 # Number of rooms in map. Should be a square number.
+        numRooms = self.size * self.size # Number of rooms in map. Should be a square number.
         
         self.rooms = [] # Stores lists of room objects. Each item is a list containing room of objects. Each item is a row.
         tempRooms = [] # Used to store room type during generation
@@ -48,18 +50,35 @@ class Floor:
             else: 
                 break
         
-        for i in range(numRooms):
-            currentRoom = Room(self.cellWidth,self.cellHeight)
-            
-            if(tempRooms[i] == self.types["hall"]):
-                currentRoom.generateHall()
-            elif(tempRooms[i] == self.types["stairs"]):
-                currentRoom.generateStairs()
-            else:
-                currentRoom.generate()
-            
-            currentRoom.placeDoors("NWSE")
-            currentRoom.print()
+        for row in range(self.size):
+            line = []
+            for col in range(self.size):
+                index = row*self.size + col
+                currentRoom = Room(self.cellWidth,self.cellHeight)
+                
+                if(tempRooms[index] == self.types["hall"]):
+                    currentRoom.generateHall()
+                elif(tempRooms[index] == self.types["stairs"]):
+                    currentRoom.generateStairs()
+                else:
+                    currentRoom.generate()
+                
+                currentRoom.placeDoors("NWSE")
+                line.append(currentRoom)
+            self.layout.append(line)
+        
+        
+        for row in self.layout:
+            for line in range(self.cellHeight):
+                string = ""
+                for item in row:
+                    string = string + item.getlineOffset(line)
+                print(string)
+        # for row in self.layout:
+        #     for item in row:
+        #         item.print()
+        #         for i in range(self.cellHeight):
+        #             print(item.getlineOffset(i))        
 
 
         
