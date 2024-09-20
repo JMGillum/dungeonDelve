@@ -57,7 +57,8 @@ class Floor:
                 currentRoom.generateStairs()
             else:
                 currentRoom.generate()
-                
+            
+            currentRoom.placeDoors("NWSE")
             currentRoom.print()
 
 

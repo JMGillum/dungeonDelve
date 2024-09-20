@@ -1,12 +1,13 @@
 {
     "topWall": "-",
     "leftWall": "|",
-    "bottomWall": "=",
-    "rightWall": "/",
+    "bottomWall": "-",
+    "rightWall": "|",
     "cornerWall":"+",
     "floor": ".",
     "hallStart": "#",
     "empty": " ",
     "hallMiddle": "#",
-    "stairs":"!"
+    "stairs":"!",
+    "door":"^"
 }
