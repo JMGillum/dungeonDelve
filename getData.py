@@ -13,6 +13,7 @@ class Customization:
         self.hallStart = "#"
         self.empty = " "
         self.hallMiddle = "#"
+        self.stairs = "!"
 
         self.getOrder()
 
@@ -74,6 +75,10 @@ class Customization:
             pass
         try:
             self.hallMiddle = characters["hallMiddle"]
+        except KeyError:
+            pass
+        try:
+            self.stairs = characters["stairs"]
         except KeyError:
             pass
     
