@@ -32,7 +32,7 @@ class Floor:
         
         self.rooms = [] # Stores lists of room objects. Each item is a list containing room of objects. Each item is a row.
         tempRooms = [] # Used to store room type during generation
-        chanceHall = 20 # Percent chance a normal room will be converted into a hall
+        chanceHall = 50 # Percent chance a normal room will be converted into a hall
         minRooms = 7 # Minimum number of rooms on map
         numHalls = 0 # Number of hall rooms found (abscence of a room)
         for i in range(numRooms):
@@ -74,11 +74,6 @@ class Floor:
                 for item in row:
                     string = string + item.getlineOffset(line)
                 print(string)
-        # for row in self.layout:
-        #     for item in row:
-        #         item.print()
-        #         for i in range(self.cellHeight):
-        #             print(item.getlineOffset(i))        
 
 
         
