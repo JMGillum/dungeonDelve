@@ -115,8 +115,11 @@ class Floor:
                 # print(line)
                 for col in range(hall.width):
                     # print(f"col:{col} pos:{hall.positionX}")
-                    if(not hallMap[row][col] == custom.empty):
-                        line[col+hall.positionX] = hallMap[row][col]
+                    try:
+                        if(not hallMap[row][col] == custom.empty):
+                            line[col+hall.positionX] = hallMap[row][col]
+                    except IndexError:
+                        pass
                 self.map[hall.positionY + row] = line
 
     def connectRooms(self,row1,col1,row2,col2):
