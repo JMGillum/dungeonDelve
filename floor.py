@@ -172,7 +172,7 @@ class Floor:
                     print(f"startX:{startX} startY:{startY} endX:{endX} endY:{endY}")
                     hall.generate(startX + room1.positionX,endX + room2.positionX,startY,endY,1)
                     hall.print()
-                    print(f"startX:{startX + room1.positionX} startY:{startY + room1.positionY} endX:{endX + room2.positionX} endY:{endY + room2.positionY}")
+                    # print(f"startX:{startX + room1.positionX} startY:{startY + room1.positionY} endX:{endX + room2.positionX} endY:{endY + room2.positionY}")
                     positionX = startX + room1.positionX
                     positionY = startY
                     if(endX + room2.positionX < positionX):

@@ -95,6 +95,7 @@ class Hall:
                         else:
                             string.append(custom.empty)
                     self.map.append(string)
+
             else:
                 for i in range(self.height):
                     string.append(custom.hallMiddle)
