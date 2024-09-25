@@ -71,10 +71,12 @@ class Floor:
                 line.append(currentRoom)
             self.layout.append(line)
         
-        self.generateMap()
-        self.print()
         self.connectRooms(0,0,0,1)
-        print("_____________________________")
+        self.connectRooms(0,1,0,2)
+        self.connectRooms(1,0,1,1)
+        self.connectRooms(1,1,1,2)
+        self.connectRooms(2,0,2,1)
+        self.connectRooms(2,1,2,2)
         self.generateMap()
         self.print()
 
@@ -133,19 +135,20 @@ class Floor:
                     self.connectRooms(row2,col2,row1,col1)
                 else:
                     hall = Hall()
-                    startX = room1.positionX + room1.width - 1
-                    startY = random.randint(1,room1.height-2)
-                    endX = room2.positionX + self.cellWidth
-                    endY = random.randint(1,room2.height-2)
-                    print(f"startX:{startX} startY:{startY} endX:{endX} endY:{endY}")
+                    startX = room1.positionX + room1.width - 1 + self.cellWidth*col1
+                    startY = random.randint(1,room1.height-2) + self.cellHeight*row1
+                    endX = room2.positionX + self.cellWidth*col2
+                    endY = random.randint(1,room2.height-2) + self.cellHeight*row2
+                    # print(f"startX:{startX} startY:{startY} endX:{endX} endY:{endY}")
                     hall.generate(startX,endX,startY + room1.positionY,endY + room2.positionY)
+                    # hall.print()
                     positionX = startX
                     positionY = startY + room1.positionY
                     if(endY + room2.positionY < positionY):
                         positionY = endY + room2.positionY
                     hall.place(positionX,positionY)
                     self.halls.append(hall)
-                    print(f"startX:{startX} startY:{startY + room1.positionY} endX:{endX} endY:{endY + room2.positionY}")
+                    # print(f"startX:{startX} startY:{startY + room1.positionY} endX:{endX} endY:{endY + room2.positionY}")
                     self.layout[row1][col1].placeDoor(room1.width-1,startY)
                     self.layout[row2][col2].placeDoor(0,endY)
 

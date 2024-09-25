@@ -59,7 +59,7 @@ class Hall:
                 for i in range(self.width):
                     string.append(custom.hallMiddle)
                 self.map.append(string)
-        self.print()
+        # self.print()
 
     def print(self):
         if(self.map):
