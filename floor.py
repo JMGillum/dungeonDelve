@@ -3,6 +3,7 @@ import random
 import getData
 from datetime import datetime
 from room import Room
+from hall import Hall
 
 custom = getData.Customization()
 
@@ -50,10 +51,11 @@ class Floor:
             else: 
                 break
         
+        # Generates rooms based on their type, and appends to rooms list
         for row in range(self.size):
             line = []
             for col in range(self.size):
-                index = row*self.size + col
+                index = row*self.size + col # Index of tempRooms[]
                 currentRoom = Room(self.cellWidth,self.cellHeight)
                 
                 if(tempRooms[index] == self.types["hall"]):
@@ -61,7 +63,7 @@ class Floor:
                 elif(tempRooms[index] == self.types["stairs"]):
                     currentRoom.generateStairs()
                 else:
-                    currentRoom.generate()
+                    currentRoom.generate() # Defaults to generating a normal room
                 
                 currentRoom.placeDoors("NWSE")
                 line.append(currentRoom)
@@ -74,25 +76,36 @@ class Floor:
                 for item in row:
                     string = string + item.getlineOffset(line)
                 print(string)
-
-
         
+        self.connectRooms(0,0,0,1)
 
-    def combineRooms(self):
-        self.floor = []
-        for i in range(3):
-            for j in range(self.cellHeight):
-                line = []
-                for k in range(3):
-                    line += self.rooms[(3*i)+k].getLine(j)
-                    if(k < 2):
-                        del line[-1]
-                self.floor += line
-        return self.floor
+    def connectRooms(self,row1,col1,row2,col2):
+        """
+        Connects the room at self.layout[row1][col1] to self.layout[row2][col2]
+        """
+        
+        room1 = self.layout[row1][col1]
+        room2 = self.layout[row2][col2]
 
-    def listRooms(self):
-        for item in self.rooms:
-            print(f"Cell Width: 26 Cell Height: 10 PadTop: {item.padTop} PadLeft: {item.padLeft} Width: {item.width} Height: {item.height}")
-            for i in range(10):
-                print(item.getLine(i))
+        if(not room1.type):
+            if(room2.type):
+                self.connectRooms(row2,col2,row1,col1)
+            else:
+                return
+        elif(not room2.type):
+            return
+        
+        if(row1 == row2):
+            if(col1 > col2):
+                self.connectRooms(row2,col2,row1,col1)
+            else:
+                hall = Hall()
+                startX = room1.positionX + room1.width - 1
+                startY = room1.positionY + random.randint(0,room1.height)
+                endX = room2.positionX + self.cellWidth
+                endY = room2.positionY + random.randint(0,room2.height)
+                print(f"startX:{startX} startY:{startY} endX:{endX} endY:{endY}")
+                hall.generate(startX,endX,startY,endY)
+
+
     
