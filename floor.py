@@ -17,6 +17,8 @@ class Floor:
              "stairs":3
              }
         self.layout = []
+        self.halls = []
+        self.map = []
         self.size = 3 # 3 x 3 rooms
 
     def setSize(self,width,height):
@@ -65,19 +67,49 @@ class Floor:
                 else:
                     currentRoom.generate() # Defaults to generating a normal room
                 
-                currentRoom.placeDoors("NWSE")
+                # currentRoom.randomDoors("NWSE")
                 line.append(currentRoom)
             self.layout.append(line)
         
+        self.generateMap()
+        self.print()
+        self.connectRooms(0,0,0,1)
+        print("_____________________________")
+        self.generateMap()
+        self.print()
+
+
+    def print(self):
+        for row in self.map:
+            for col in row:
+                print(f"{col}",end="")
+            print("")
         
+    
+    def generateMap(self):
+        self.map = []
         for row in self.layout:
             for line in range(self.cellHeight):
-                string = ""
+                string = []
                 for item in row:
-                    string = string + item.getlineOffset(line)
-                print(string)
+                    l = list(item.getlineOffset(line))
+                    # print(l)
+                    string = string + l
+                # for char in string:
+                #     print(char,end="")
+                # print("")
+                self.map.append(string)
         
-        self.connectRooms(0,0,0,1)
+        for hall in self.halls:
+            hallMap = hall.map
+            for row in range(hall.height):
+                line = self.map[hall.positionY + row]
+                # print(line)
+                for col in range(hall.width):
+                    # print(f"col:{col} pos:{hall.positionX}")
+                    if(not hallMap[row][col] == custom.empty):
+                        line[col+hall.positionX] = hallMap[row][col]
+                self.map[hall.positionY + row] = line
 
     def connectRooms(self,row1,col1,row2,col2):
         """
@@ -95,17 +127,27 @@ class Floor:
         elif(not room2.type):
             return
         
-        if(row1 == row2):
-            if(col1 > col2):
-                self.connectRooms(row2,col2,row1,col1)
-            else:
-                hall = Hall()
-                startX = room1.positionX + room1.width - 1
-                startY = room1.positionY + random.randint(0,room1.height)
-                endX = room2.positionX + self.cellWidth
-                endY = room2.positionY + random.randint(0,room2.height)
-                print(f"startX:{startX} startY:{startY} endX:{endX} endY:{endY}")
-                hall.generate(startX,endX,startY,endY)
+        else:
+            if(row1 == row2):
+                if(col1 > col2):
+                    self.connectRooms(row2,col2,row1,col1)
+                else:
+                    hall = Hall()
+                    startX = room1.positionX + room1.width - 1
+                    startY = random.randint(1,room1.height-2)
+                    endX = room2.positionX + self.cellWidth
+                    endY = random.randint(1,room2.height-2)
+                    print(f"startX:{startX} startY:{startY} endX:{endX} endY:{endY}")
+                    hall.generate(startX,endX,startY + room1.positionY,endY + room2.positionY)
+                    positionX = startX
+                    positionY = startY + room1.positionY
+                    if(endY + room2.positionY < positionY):
+                        positionY = endY + room2.positionY
+                    hall.place(positionX,positionY)
+                    self.halls.append(hall)
+                    print(f"startX:{startX} startY:{startY + room1.positionY} endX:{endX} endY:{endY + room2.positionY}")
+                    self.layout[row1][col1].placeDoor(room1.width-1,startY)
+                    self.layout[row2][col2].placeDoor(0,endY)
 
 
     

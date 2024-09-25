@@ -11,6 +11,11 @@ class Hall:
         self.map = [] # List of lists of lines (characters) Ex: [['#','#',' '],[' ','#',' '],[' ','#','#']]
     
 
+    def place(self,positionX,positionY):
+        self.positionX = positionX
+        self.positionY = positionY
+    
+
     def generate(self,startX,endX,startY,endY):
         self.width = abs(startX-endX) + 1
         self.height = abs(startY-endY) + 1
