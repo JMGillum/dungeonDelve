@@ -13,6 +13,7 @@ class Room:
         self.positionX = -1
         self.positionY = -1
         self.map = []
+        self.halls = []
         self.type = 0 # empty, normal, stairs
         
     
@@ -88,14 +89,14 @@ class Room:
         # self.map[y] = line
     
 
-    def placeDoors(self,location):
+    def randomDoors(self,location):
         """
         Location should be a string that contains at most one of each: NWSE
         These are the cardinal directions corresponding to the side of the room that a door will be placed
         """
 
         if(self.type):
-            self.halls = [] # Stores the coordinates of each door. stored as [x,y]
+             # Stores the coordinates of each door. stored as [x,y]
             x = -1
             y = -1
 
@@ -129,6 +130,15 @@ class Room:
                 
                 self.map[item[1]] = line
                 print(f"HALL: x:{item[0]},y:{item[1]}")
+
+    def placeDoor(self,x,y):
+        if(self.type):
+            if((x >= 0 and x < self.width) and (y >= 0 and y < self.height)):
+                line = list(self.map[y])
+                line[x] = custom.door
+                line = "".join(line)
+                self.map[y] = line
+                self.halls.append([x,y])
 
 
     def print(self):
