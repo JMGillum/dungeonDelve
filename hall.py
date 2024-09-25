@@ -1,4 +1,8 @@
 import math
+import getData
+
+
+custom = getData.Customization()
 
 class Hall:
     def __init__(self):
@@ -30,9 +34,9 @@ class Hall:
                     middle = math.floor(self.width/2)
                     for col in range(self.width):
                         if((line == 0 and col <= middle) or (line == self.height - 1 and col > middle) or (col == middle)):
-                            string.append('#')
+                            string.append(custom.hallMiddle)
                         else:
-                            string.append(' ')
+                            string.append(custom.empty)
                     self.map.append(string)
                             
             elif(sType == 1):
@@ -41,13 +45,13 @@ class Hall:
                     middle = math.floor(self.width/2)
                     for col in range(self.width):
                         if((line == 0 and col > middle) or (line == self.height - 1 and col <= middle) or (col == middle)):
-                            string.append('#')
+                            string.append(custom.hallMiddle)
                         else:
-                            string.append(' ')
+                            string.append(custom.empty)
                     self.map.append(string)
             else:
                 for i in range(self.width):
-                    string.append('#')
+                    string.append(custom.hallMiddle)
         self.print()
 
     def print(self):
