@@ -12,6 +12,9 @@ class Hall:
     
 
     def place(self,positionX,positionY):
+        """
+        Stores the starting location of the hall. (Upper left coordinate)
+        """
         self.positionX = positionX
         self.positionY = positionY
     
@@ -30,6 +33,9 @@ class Hall:
 
         # Determines if the hall is shaped like a S, Z, or straight line
         if(type == 0):
+            """
+            Horizontal connection
+            """
             if(startY < endY):
                 sType = 0 # Z
             elif(startY > endY):
@@ -66,6 +72,9 @@ class Hall:
                 self.map.append(string)
 
         elif(type == 1):
+            """
+            Vertical connection
+            """
             if(startX < endX):
                 sType = 0 # x^3
             elif(startX > endX):
@@ -74,7 +83,7 @@ class Hall:
                 sType = 2 # - (straight line)
 
             string = []
-            if(sType == 0):
+            if(sType == 0): # down on left and up on right
                 for line in range(self.height):
                     string = []
                     middle = math.floor(self.height/2) # The column with the vertical line
@@ -85,7 +94,7 @@ class Hall:
                             string.append(custom.empty)
                     self.map.append(string)
                             
-            elif(sType == 1):
+            elif(sType == 1): # up on left and down on right
                 for line in range(self.height):
                     string = []
                     middle = math.floor(self.height/2) # The column with the vertical line
@@ -96,13 +105,16 @@ class Hall:
                             string.append(custom.empty)
                     self.map.append(string)
 
-            else:
+            else: # Straight line
                 for i in range(self.height):
                     string.append(custom.hallMiddle)
                 self.map.append(string)
 
 
     def print(self):
+        """
+        Prints out the hall, irrespective of its position
+        """
         if(self.map):
             for line in self.map:
                 for char in line:

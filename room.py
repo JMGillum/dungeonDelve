@@ -58,6 +58,9 @@ class Room:
 
 
     def generateStairs(self):
+        """
+        Generates a room with stairs in it
+        """
         self.generate()
         x = random.randint(1,self.width-2)
         y = random.randint(1,self.height-2)
@@ -72,66 +75,21 @@ class Room:
         
 
     def generateHall(self):
+        """
+        Generates a nonexistent room.
+        """
         self.width = -1
         self.height = -1
         self.positionX = -1
         self.positionY = -1
         self.map = []
         self.type = 0
-        # self.generate()
-        # x = random.randint(1,self.width-2)
-        # y = random.randint(1,self.height-2)
-
-        # line = self.map[y]
-        # line = list(line)
-        # line[x] = "H"
-        # line = "".join(line)
-        # self.map[y] = line
     
 
-    def randomDoors(self,location):
-        """
-        Location should be a string that contains at most one of each: NWSE
-        These are the cardinal directions corresponding to the side of the room that a door will be placed
-        """
-
-        if(self.type):
-             # Stores the coordinates of each door. stored as [x,y]
-            x = -1
-            y = -1
-
-            # Picks a random location along one of the walls, and places a door there. Then appends to list of hallways
-            if(location.find('N') >= 0):
-                x = random.randint(1,self.width-2)
-                y = 0 
-                self.halls.append([x,y])
-
-            if(location.find('S') >= 0):
-                x = random.randint(1,self.width-2)
-                y = self.height-1
-                self.halls.append([x,y])
-
-            if(location.find('W') >= 0):
-                x = 0
-                y = random.randint(1,self.height-2) 
-                self.halls.append([x,y])
-                
-            if(location.find('E') >= 0):
-                x = self.width-1
-                y = random.randint(1,self.height-2) 
-                self.halls.append([x,y])
-                
-            # Loops through each item in the hallway coordinates, and places a door there
-            for item in self.halls:
-                line = self.map[item[1]]
-                line = list(line)
-                line[item[0]] = custom.door
-                line = "".join(line)
-                
-                self.map[item[1]] = line
-                print(f"HALL: x:{item[0]},y:{item[1]}")
-
     def placeDoor(self,x,y):
+        """
+        Places a door at the specified coordinates, if they are valid
+        """
         if(self.type):
             if((x >= 0 and x < self.width) and (y >= 0 and y < self.height)):
                 line = list(self.map[y])

@@ -67,22 +67,20 @@ class Floor:
                 else:
                     currentRoom.generate() # Defaults to generating a normal room
                 
-                # currentRoom.randomDoors("NWSE")
                 line.append(currentRoom)
             self.layout.append(line)
         
-        self.connectRooms(0,0,0,1)
-        self.connectRooms(0,1,0,2)
-        self.connectRooms(1,0,1,1)
-        self.connectRooms(1,1,1,2)
-        self.connectRooms(2,0,2,1)
-        self.connectRooms(2,1,2,2)
-        self.connectRooms(0,0,1,0)
-        self.connectRooms(0,1,1,1)
-        self.connectRooms(0,2,1,2)
-        self.connectRooms(1,0,2,0)
-        self.connectRooms(1,1,2,1)
-        self.connectRooms(1,2,2,2)
+        # Generates horizontal Halls
+        for row in range(0,self.size):
+            for col in range(0,self.size-1):
+                self.connectRooms(row,col,row,col+1)
+        
+        # Generates Vertical Halls
+        for col in range(0,self.size):
+            for row in range(0,self.size-1):
+                self.connectRooms(row,col,row+1,col)
+        
+        # Generates map, then prints
         self.generateMap()
         self.print()
 
