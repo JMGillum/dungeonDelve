@@ -85,13 +85,20 @@ class Floor:
 
 
     def print(self):
-        for row in self.map:
-            for col in row:
-                print(f"{col}",end="")
-            print("")
+        """
+        Prints out the character map
+        """
+        if(self.map):
+            for row in self.map:
+                for col in row:
+                    print(f"{col}",end="")
+                print("")
         
     
     def generateMap(self):
+        """
+        Generates a 2D array of characters to display the map
+        """
         self.map = []
         for row in self.layout:
             for line in range(self.cellHeight):
