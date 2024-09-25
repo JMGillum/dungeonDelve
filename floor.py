@@ -77,6 +77,12 @@ class Floor:
         self.connectRooms(1,1,1,2)
         self.connectRooms(2,0,2,1)
         self.connectRooms(2,1,2,2)
+        self.connectRooms(0,0,1,0)
+        self.connectRooms(0,1,1,1)
+        self.connectRooms(0,2,1,2)
+        self.connectRooms(1,0,2,0)
+        self.connectRooms(1,1,2,1)
+        self.connectRooms(1,2,2,2)
         self.generateMap()
         self.print()
 
@@ -151,6 +157,29 @@ class Floor:
                     # print(f"startX:{startX} startY:{startY + room1.positionY} endX:{endX} endY:{endY + room2.positionY}")
                     self.layout[row1][col1].placeDoor(room1.width-1,startY)
                     self.layout[row2][col2].placeDoor(0,endY)
+            elif(col1 == col2):
+                if(row1 > row2):
+                    self.connectRooms(row2,col2,row1,col1)
+                else:
+                    hall = Hall()
+                    startX = random.randint(1,room1.width-2) + self.cellWidth*col1
+                    startY = room1.positionY + room1.height - 1 + self.cellHeight*row1
+                    endX = random.randint(1,room2.width-2) + self.cellWidth*col2
+                    endY = room2.positionY + self.cellHeight*row2
+                    print(f"startX:{startX} startY:{startY} endX:{endX} endY:{endY}")
+                    hall.generate(startX + room1.positionX,endX + room2.positionX,startY,endY,1)
+                    hall.print()
+                    print(f"startX:{startX + room1.positionX} startY:{startY + room1.positionY} endX:{endX + room2.positionX} endY:{endY + room2.positionY}")
+                    positionX = startX + room1.positionX
+                    positionY = startY
+                    if(endX + room2.positionX < positionX):
+                        positionX = endX + room2.positionX
+                    hall.place(positionX,positionY)
+                    self.halls.append(hall)
+                    
+                    self.layout[row1][col1].placeDoor(startX,room1.height-1)
+                    self.layout[row2][col2].placeDoor(endX,0)
+            
 
 
     
