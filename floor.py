@@ -1,7 +1,6 @@
 import math
 import random
 import getData
-from datetime import datetime
 from room import Room
 from hall import Hall
 
@@ -29,7 +28,7 @@ class Floor:
 
     def generateRooms(self):
         
-        random.seed(datetime.now().timestamp())
+        
 
         numRooms = self.size * self.size # Number of rooms in map. Should be a square number.
         

@@ -1,5 +1,7 @@
 # import level
 import floor
+import random
+from datetime import datetime
 
 
 # def convertListToString(ls):
@@ -24,7 +26,7 @@ import floor
 # floor.generateHalls()
 # print(convertListToString(floor.combineHalls()))
 
-
+random.seed(datetime.now().timestamp())
 
 level = floor.Floor()
 level.setSize(80,24)
